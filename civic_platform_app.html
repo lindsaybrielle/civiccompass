@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Connect - Your Voice Matters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .demo-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .demo-warning {
+            font-size: 1.1em;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .demo-subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Onboarding Styles */
+        .onboarding {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            color: #666;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .option-subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .dashboard-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .urgent-bill {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .bill-status {
+            background: #dc3545;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .bill-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .personal-impact {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 15px 0;
+        }
+
+        .personal-impact strong {
+            color: #155724;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .election-card, .official-card {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .countdown {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .script-content {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            line-height: 1.6;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .demo-notice {
+            background: #e8f4f8;
+            border: 2px solid #17a2b8;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .demo-notice h4 {
+            color: #17a2b8;
+            margin-bottom: 15px;
+        }
+
+        .demo-notice ul {
+            margin: 15px 0 15px 20px;
+            color: #333;
+        }
+
+        .demo-notice li {
+            margin-bottom: 5px;
+        }
+
+        .demo-tag {
+            background: #ff6b6b;
+            color: white;
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: normal;
+        }
+
+        .demo-status {
+            background: #ff6b6b !important;
+        }
+
+        .demo-countdown {
+            background: #ff6b6b !important;
+        }
+
+        .demo-disabled {
+            opacity: 0.7;
+            cursor: help !important;
+        }
+
+        .demo-disabled:hover {
+            transform: none !important;
+            background: #6c757d !important;
+        }
+
+        .feedback-section {
+            background: #f8f9fa;
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .feedback-section h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .demo-banner {
+                padding: 8px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .demo-warning {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="demo-banner">
+                <div class="demo-warning">
+                    ⚠️ <strong>DEMO VERSION</strong> - All data is fictional for testing purposes only
+                </div>
+            </div>
+            <h1>🗳️ Civic Connect</h1>
+            <p>Know how politics affects your daily life</p>
+            <div class="demo-subtitle">Testing the concept - Real features coming soon!</div>
+        </div>
+
+        <!-- Onboarding -->
+        <div class="onboarding" id="onboarding">
+            <!-- Step 1: Location -->
+            <div class="step active" id="step1">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h2 class="step-title">Where are you?</h2>
+                    <p class="step-description">Help us find your representatives</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="selectLocation('domestic')">
+                        <div class="option-icon">🏠</div>
+                        <div class="option-title">I live in the US</div>
+                    </div>
+                    <div class="option" onclick="selectLocation('abroad')">
+                        <div class="option-icon">🌍</div>
+                        <div class="option-title">I'm American abroad</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Address -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h2 class="step-title">Where are you registered to vote?</h2>
+                    <p class="step-description">We'll find your representatives</p>
+                </div>
+                <div class="input-group">
+                    <label for="address">Your voting address</label>
+                    <input type="text" id="address" placeholder="City, State or ZIP code">
+                </div>
+            </div>
+
+            <!-- Step 3: Government Level -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h2 class="step-title">What interests you most?</h2>
+                    <p class="step-description">We'll prioritize relevant information</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="selectLevel('national')">
+                        <div class="option-icon">🏛️</div>
+                        <div class="option-title">National Issues</div>
+                        <div class="option-subtitle">Congress, President, Supreme Court</div>
+                    </div>
+                    <div class="option" onclick="selectLevel('state')">
+                        <div class="option-icon">🏢</div>
+                        <div class="option-title">State & Local</div>
+                        <div class="option-subtitle">Governor, State Legislature, Mayor</div>
+                    </div>
+                    <div class="option" onclick="selectLevel('all')">
+                        <div class="option-icon">🔄</div>
+                        <div class="option-title">All Levels</div>
+                        <div class="option-subtitle">Show me everything</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Priorities -->
+            <div class="step" id="step4">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h2 class="step-title">What issues matter to you?</h2>
+                    <p class="step-description">Pick your top 3 priorities</p>
+                </div>
+                <div class="options" id="priority-options">
+                    <div class="option" onclick="togglePriority(this, 'healthcare')">
+                        <div class="option-icon">🏥</div>
+                        <div class="option-title">Healthcare</div>
+                    </div>
+                    <div class="option" onclick="togglePriority(this, 'economy')">
+                        <div class="option-icon">💼</div>
+                        <div class="option-title">Economy & Jobs</div>
+                    </div>
+                    <div class="option" onclick="togglePriority(this, 'climate')">
+                        <div class="option-icon">🌱</div>
+                        <div class="option-title">Climate</div>
+                    </div>
+                    <div class="option" onclick="togglePriority(this, 'education')">
+                        <div class="option-icon">📚</div>
+                        <div class="option-title">Education</div>
+                    </div>
+                    <div class="option" onclick="togglePriority(this, 'reproductive-rights')">
+                        <div class="option-icon">⚖️</div>
+                        <div class="option-title">Reproductive Rights</div>
+                    </div>
+                    <div class="option" onclick="togglePriority(this, 'immigration')">
+                        <div class="option-icon">🌍</div>
+                        <div class="option-title">Immigration</div>
+                    </div>
+                </div>
+                <p id="priority-count" style="text-align: center; color: #666; margin-top: 15px;">Select up to 3 issues</p>
+            </div>
+
+            <!-- Step 5: Notifications -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h2 class="step-title">Stay informed?</h2>
+                    <p class="step-description">Get alerts when important votes happen</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="selectNotifications(true)">
+                        <div class="option-icon">🔔</div>
+                        <div class="option-title">Yes, keep me updated</div>
+                        <div class="option-subtitle">Email alerts for urgent votes</div>
+                    </div>
+                    <div class="option" onclick="selectNotifications(false)">
+                        <div class="option-icon">📱</div>
+                        <div class="option-title">I'll check back regularly</div>
+                        <div class="option-subtitle">No notifications needed</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="previousStep()" id="prevBtn" disabled>Previous</button>
+                <button class="btn" onclick="nextStep()" id="nextBtn" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <div class="demo-banner">
+                <div class="demo-warning">
+                    🧪 <strong>CONCEPT DEMO</strong> - This shows how the app would work with real data
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <h3 id="user-greeting">Welcome!</h3>
+                <p id="user-location"></p>
+            </div>
+
+            <div class="dashboard-content">
+                <!-- Demo Notice -->
+                <div class="demo-notice">
+                    <h4>📋 What You're Testing:</h4>
+                    <ul>
+                        <li>How easy is the onboarding process?</li>
+                        <li>Does the personalization feel relevant?</li>
+                        <li>Would you find this information useful?</li>
+                        <li>Does the app feel trustworthy and nonpartisan?</li>
+                    </ul>
+                    <p><strong>Coming soon:</strong> Real bills, actual representatives, live elections</p>
+                </div>
+
+                <!-- Urgent Action -->
+                <div class="section">
+                    <h3>🚨 Urgent Action Needed <span class="demo-tag">[DEMO]</span></h3>
+                    <div class="urgent-bill">
+                        <div class="bill-status demo-status">EXAMPLE VOTE</div>
+                        <div class="bill-title" id="bill-title">Demo Bill: Example Healthcare Protection Act</div>
+                        <p id="bill-description">This is example legislation to show how the app would present real bills and their impacts.</p>
+                        <div class="personal-impact" id="personal-impact">
+                            <strong>How this affects you (example):</strong> <span id="impact-text">This shows how we'd explain personal impact of real legislation.</span>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn demo-disabled" onclick="showDemoMessage()">📞 Call Your Rep (Demo)</button>
+                            <button class="action-btn secondary demo-disabled" onclick="showDemoMessage()">📱 Share Alert (Demo)</button>
+                            <button class="action-btn secondary" onclick="learnMore()">📄 Learn More About Real Features</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Election -->
+                <div class="section">
+                    <h3>🗳️ Upcoming Election <span class="demo-tag">[DEMO]</span></h3>
+                    <div class="election-card">
+                        <div class="countdown demo-countdown">EXAMPLE</div>
+                        <div class="bill-title">Demo Election: Example State Senate Race</div>
+                        <p>This shows how we'd present real upcoming elections that match your interests.</p>
+                        <div class="actions">
+                            <button class="action-btn demo-disabled" onclick="showDemoMessage()">👥 Compare Candidates (Demo)</button>
+                            <button class="action-btn secondary" onclick="registerToVote()">📝 Check Real Registration</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Official to Follow -->
+                <div class="section">
+                    <h3>⭐ Official Recommended for You <span class="demo-tag">[DEMO]</span></h3>
+                    <div class="official-card">
+                        <div class="bill-title">Demo Candidate: Example Policy Leader</div>
+                        <p><strong>Why follow (example):</strong> This shows how we'd recommend real officials based on your priorities and their actual voting records.</p>
+                        <div class="actions">
+                            <button class="action-btn demo-disabled" onclick="showDemoMessage()">📱 Follow Updates (Demo)</button>
+                            <button class="action-btn secondary demo-disabled" onclick="showDemoMessage()">💰 Support Campaign (Demo)</button>
+                            <button class="action-btn secondary demo-disabled" onclick="showDemoMessage()">🤝 Volunteer (Demo)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="section feedback-section">
+                    <h3>💬 Help Us Build This!</h3>
+                    <p>You just experienced our concept for making civic engagement personal and accessible. We'd love your feedback:</p>
+                    <div class="actions">
+                        <button class="action-btn" onclick="giveFeedback()">📝 Share Feedback</button>
+                        <button class="action-btn secondary" onclick="joinWaitlist()">🔔 Join Waitlist</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Completion Message -->
+        <div class="modal" id="demoCompleteModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🎉 Demo Complete!</h3>
+                </div>
+                <p>Thanks for testing our civic engagement concept!</p>
+                <p><strong>Next steps:</strong></p>
+                <ul style="margin: 15px 0 15px 20px;">
+                    <li>We'll build this with real data from official sources</li>
+                    <li>Add actual representatives and live bills</li>
+                    <li>Create working contact tools and voting guides</li>
+                </ul>
+                <button class="action-btn" onclick="giveFeedback()">📝 Share Feedback</button>
+                <button class="action-btn secondary" onclick="joinWaitlist()">🔔 Join Waitlist</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User profile data
+        let user = {
+            location: '',
+            address: '',
+            level: '',
+            priorities: [],
+            notifications: false,
+            currentStep: 1
+        };
+
+        // Navigation functions
+        function nextStep() {
+            if (user.currentStep < 5) {
+                document.getElementById(`step${user.currentStep}`).classList.remove('active');
+                user.currentStep++;
+                document.getElementById(`step${user.currentStep}`).classList.add('active');
+                updateNavigation();
+            } else {
+                finishOnboarding();
+            }
+        }
+
+        function previousStep() {
+            if (user.currentStep > 1) {
+                document.getElementById(`step${user.currentStep}`).classList.remove('active');
+                user.currentStep--;
+                document.getElementById(`step${user.currentStep}`).classList.add('active');
+                updateNavigation();
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = user.currentStep === 1;
+            
+            let canProceed = false;
+            switch (user.currentStep) {
+                case 1: canProceed = user.location !== ''; break;
+                case 2: canProceed = user.address !== ''; break;
+                case 3: canProceed = user.level !== ''; break;
+                case 4: canProceed = user.priorities.length > 0; break;
+                case 5: canProceed = true; nextBtn.textContent = 'Get Started'; break;
+            }
+            
+            nextBtn.disabled = !canProceed;
+        }
+
+        // Selection functions
+        function selectLocation(location) {
+            user.location = location;
+            document.querySelectorAll('#step1 .option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.option').classList.add('selected');
+            updateNavigation();
+        }
+
+        function selectLevel(level) {
+            user.level = level;
+            document.querySelectorAll('#step3 .option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.option').classList.add('selected');
+            updateNavigation();
+        }
+
+        function togglePriority(element, priority) {
+            if (user.priorities.includes(priority)) {
+                user.priorities = user.priorities.filter(p => p !== priority);
+                element.classList.remove('selected');
+            } else if (user.priorities.length < 3) {
+                user.priorities.push(priority);
+                element.classList.add('selected');
+            } else {
+                alert('Please select only 3 priorities');
+                return;
+            }
+            
+            const count = user.priorities.length;
+            document.getElementById('priority-count').textContent = 
+                count === 0 ? 'Select up to 3 issues' :
+                count === 1 ? '1 selected (2 more)' :
+                count === 2 ? '2 selected (1 more)' :
+                '3 selected (maximum)';
+            
+            updateNavigation();
+        }
+
+        function selectNotifications(enabled) {
+            user.notifications = enabled;
+            document.querySelectorAll('#step5 .option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.option').classList.add('selected');
+            updateNavigation();
+        }
+
+        // Address input handler
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('address').addEventListener('input', function() {
+                user.address = this.value.trim();
+                updateNavigation();
+            });
+        });
+
+        // Finish onboarding
+        function finishOnboarding() {
+            document.getElementById('onboarding').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            
+            // Personalize dashboard
+            personalizeDashboard();
+        }
+
+        function personalizeDashboard() {
+            // Update greeting
+            const greeting = user.location === 'abroad' ? 
+                `Welcome, American abroad! (Demo)` : 
+                `Welcome to the Civic Connect demo!`;
+            document.getElementById('user-greeting').textContent = greeting;
+            document.getElementById('user-location').textContent = `📍 ${user.address} (Demo location)`;
+            
+            // Personalize bill impact based on priorities
+            let impact = 'This shows how we\'d explain the personal impact of real legislation.';
+            if (user.priorities.includes('reproductive-rights')) {
+                impact = 'Example: Could affect reproductive healthcare access in your state.';
+            } else if (user.priorities.includes('healthcare')) {
+                impact = 'Example: Could affect your healthcare costs and insurance coverage.';
+            } else if (user.priorities.includes('climate')) {
+                impact = 'Example: Could influence environmental policies affecting your area.';
+            } else if (user.priorities.includes('economy')) {
+                impact = 'Example: Could affect job opportunities and economic policies in your region.';
+            } else if (user.priorities.includes('education')) {
+                impact = 'Example: Could change education funding and student loan policies.';
+            }
+            document.getElementById('impact-text').textContent = impact;
+        }
+
+        // Action functions
+        function showDemoMessage() {
+            alert('🧪 Demo Feature\n\nThis would be a real action in the live version. You\'re testing the concept and user experience.\n\nWhat did you think of this feature? Would you use it?');
+        }
+
+        function openCallScript() {
+            showDemoMessage();
+        }
+
+        function shareOnSocial() {
+            // Allow real sharing for demo purposes
+            const text = '🧪 Testing a new civic engagement app concept! Excited about making politics more accessible and personal.';
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function learnMore() {
+            alert('📚 Learn More\n\nIn the real version, this would link to:\n• Full bill text on Congress.gov\n• Nonpartisan analysis\n• Voting records\n• Impact studies\n\nAll from official, verified sources.');
+        }
+
+        function viewCandidates() {
+            showDemoMessage();
+        }
+
+        function registerToVote() {
+            // This can stay real since it's helpful
+            if (confirm('This will take you to the official Vote.gov website to check your real registration status. Continue?')) {
+                window.open('https://www.vote.gov/', '_blank');
+            }
+        }
+
+        function followOfficial() {
+            showDemoMessage();
+        }
+
+        function donateToOfficial() {
+            showDemoMessage();
+        }
+
+        function volunteer() {
+            showDemoMessage();
+        }
+
+        function giveFeedback() {
+            const feedback = prompt('💬 We\'d love your feedback!\n\nWhat did you think of:\n• The onboarding process\n• The personalization\n• The overall concept\n• Trust and neutrality\n\nType your thoughts:');
+            
+            if (feedback) {
+                alert('Thank you! Your feedback helps us build a better civic engagement platform.\n\nIn the real version, this would be saved and we\'d follow up with you.');
+                console.log('User feedback:', feedback); // For demo tracking
+            }
+        }
+
+        function joinWaitlist() {
+            const email = prompt('📧 Join our waitlist!\n\nEnter your email to be notified when we launch with real data:');
+            
+            if (email && email.includes('@')) {
+                alert(`✅ Thanks! We'll email ${email} when the real version launches.\n\nYou'll be among the first to access live civic data and actions.`);
+                console.log('Waitlist signup:', email); // For demo tracking
+            } else if (email) {
+                alert('Please enter a valid email address.');
+            }
+        }
+
+        // Initialize
+        updateNavigation();
+    </script>
+</body>
+</html>
